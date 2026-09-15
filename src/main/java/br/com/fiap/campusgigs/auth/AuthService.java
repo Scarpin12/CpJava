@@ -1,5 +1,6 @@
 package br.com.fiap.campusgigs.auth;
 
+import br.com.fiap.campusgigs.cep.EnderecoService;
 import br.com.fiap.campusgigs.exception.NegocioException;
 import br.com.fiap.campusgigs.security.JwtService;
 import br.com.fiap.campusgigs.usuario.Papel;
@@ -17,6 +18,7 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EnderecoService enderecoService;
     private final JwtService jwtService;
 
     public UsuarioResponse cadastrar(CadastroRequest request) {
@@ -24,11 +26,15 @@ public class AuthService {
             throw new NegocioException("Já existe um usuário cadastrado com esse e-mail");
         }
 
+        var endereco = enderecoService.buscarEndereco(request.cep());
+
         var usuario = Usuario.builder()
                 .nome(request.nome())
                 .email(request.email())
                 .senha(passwordEncoder.encode(request.senha()))
                 .cep(request.cep())
+                .cidade(endereco.localidade())
+                .uf(endereco.uf())
                 .papel(Papel.USER)
                 .build();
 

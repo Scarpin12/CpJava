@@ -31,6 +31,16 @@ public class GlobalExceptionHandler {
         return responder(HttpStatus.FORBIDDEN, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(CepInvalidoException.class)
+    public ResponseEntity<ApiErrorResponse> handleCepInvalido(CepInvalidoException ex, HttpServletRequest request) {
+        return responder(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(CepIndisponivelException.class)
+    public ResponseEntity<ApiErrorResponse> handleCepIndisponivel(CepIndisponivelException ex, HttpServletRequest request) {
+        return responder(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleCredenciaisInvalidas(BadCredentialsException ex, HttpServletRequest request) {
         return responder(HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
