@@ -19,6 +19,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
     ) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write("""
                 {"status":403,"erro":"Forbidden","mensagem":"Você não tem permissão para executar essa operação"}""");
     }
