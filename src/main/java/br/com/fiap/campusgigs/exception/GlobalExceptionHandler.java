@@ -21,6 +21,16 @@ public class GlobalExceptionHandler {
         return responder(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ApiErrorResponse> handleNaoEncontrado(RecursoNaoEncontradoException ex, HttpServletRequest request) {
+        return responder(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(AcessoNegadoException.class)
+    public ResponseEntity<ApiErrorResponse> handleAcessoNegado(AcessoNegadoException ex, HttpServletRequest request) {
+        return responder(HttpStatus.FORBIDDEN, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleCredenciaisInvalidas(BadCredentialsException ex, HttpServletRequest request) {
         return responder(HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
