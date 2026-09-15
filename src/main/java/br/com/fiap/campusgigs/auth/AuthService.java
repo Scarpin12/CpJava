@@ -1,6 +1,7 @@
 package br.com.fiap.campusgigs.auth;
 
 import br.com.fiap.campusgigs.exception.NegocioException;
+import br.com.fiap.campusgigs.security.JwtService;
 import br.com.fiap.campusgigs.usuario.Papel;
 import br.com.fiap.campusgigs.usuario.Usuario;
 import br.com.fiap.campusgigs.usuario.UsuarioRepository;
@@ -16,6 +17,7 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public UsuarioResponse cadastrar(CadastroRequest request) {
         if (usuarioRepository.existsByEmail(request.email())) {
@@ -33,7 +35,7 @@ public class AuthService {
         return UsuarioResponse.from(usuarioRepository.save(usuario));
     }
 
-    public UsuarioResponse autenticar(LoginRequest request) {
+    public TokenResponse autenticar(LoginRequest request) {
         var usuario = usuarioRepository.findByEmail(request.email())
                 .orElseThrow(() -> new BadCredentialsException("E-mail ou senha inválidos"));
 
@@ -41,6 +43,7 @@ public class AuthService {
             throw new BadCredentialsException("E-mail ou senha inválidos");
         }
 
-        return UsuarioResponse.from(usuario);
+        var token = jwtService.gerarToken(usuario.getEmail(), usuario.getPapel().name());
+        return new TokenResponse(token);
     }
 }
