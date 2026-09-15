@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: 'postgres_campus_gigs'
+    environment:
+      - 'POSTGRES_DB=campusgigs'
+      - 'POSTGRES_PASSWORD=campusgigs'
+      - 'POSTGRES_USER=campusgigs'
+    ports:
+      - '5432:5432'
